@@ -11,7 +11,7 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String id;
+    Long id;
     String title;
     String description;
     Boolean completed;
@@ -22,7 +22,7 @@ public class Task {
     }
 
 
-    public Task(String id, String title, String description, Boolean completed, String user) {
+    public Task(Long id, String title, String description, Boolean completed, String user) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,12 +31,12 @@ public class Task {
     }
 
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,7 +61,7 @@ public class Task {
     }
 
 
-    public Boolean getCompleted() {
+    public Boolean isCompleted() {
         return completed;
     }
 
