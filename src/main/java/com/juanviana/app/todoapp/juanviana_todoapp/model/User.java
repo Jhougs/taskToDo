@@ -6,6 +6,8 @@ package com.juanviana.app.todoapp.juanviana_todoapp.model;
 
 import java.util.List;
 
+import com.juanviana.app.todoapp.juanviana_todoapp.utils.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,13 +31,10 @@ public class User {
 
     private String password;
 
-    private String role;
+    private Role role;
 
     @OneToMany(mappedBy = "user_id")
     List<Task> tasks;
-
-
-
 
 
     public User() {
@@ -43,7 +42,7 @@ public class User {
     }
 
 
-    public User(Long id, String email, String password, String role) {
+    public User(Long id, String email, String password, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -81,12 +80,12 @@ public class User {
     }
 
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
