@@ -1,6 +1,10 @@
 package com.juanviana.app.todoapp.juanviana_todoapp.model;
 
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,8 +26,10 @@ public class Task {
     private String description;
     private Boolean completed;
 
+    @JsonIgnoreProperties({"task", "hibernateLazyInitializer", "handler"})	
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) 
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore 
     private User user_id;
 
 

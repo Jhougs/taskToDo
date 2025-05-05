@@ -2,13 +2,16 @@ package com.juanviana.app.todoapp.juanviana_todoapp.services;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.juanviana.app.todoapp.juanviana_todoapp.dto.modelsDto.TaskDto;
 import com.juanviana.app.todoapp.juanviana_todoapp.model.Task;
+import com.juanviana.app.todoapp.juanviana_todoapp.model.User;
 import com.juanviana.app.todoapp.juanviana_todoapp.repository.TaskRepository;
+import com.juanviana.app.todoapp.juanviana_todoapp.repository.UserRepository;
 
 @Service
 public class TaskServiceImp implements TaskService {
@@ -17,11 +20,22 @@ public class TaskServiceImp implements TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    @Override
-    public List<Task> getAllTasks() {
-      
+    @Autowired
+    private UserRepository userRepository;
 
-        return StreamSupport.stream(taskRepository.findAll().spliterator(), false).toList();
+    @Override
+    public List<TaskDto> getAllTasks() {
+      
+        List<Task> tasks = StreamSupport.stream(taskRepository.findAll().spliterator(), false).toList();
+        return tasks.stream()
+        .map(task -> new TaskDto(
+            task.getId(),
+            task.getTitle(),
+            task.getDescription(),
+            task.isCompleted(),
+            task.getUser() != null ? task.getUser().getId() : null
+        )).toList();
+
     }
 
     @Override
@@ -30,17 +44,28 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public Task createTask(Task task) {
+    public Task createTask(Long id, Task task ) {
+
+        Optional<User> userFind = userRepository.findById(id);
+        if(userFind.isPresent()){
+            task.setUser(userFind.orElseThrow());            
+        }
+
         return taskRepository.save(task);
     }
 
     @Override
-    public Task updateTask(long id, Task task) {
-        Task taskToUpdate  = taskRepository.findById(id).orElseThrow();
-        taskToUpdate.setTitle(task.getTitle());
-        taskToUpdate.setDescription(task.getDescription());
-        taskToUpdate.setCompleted(task.isCompleted());
-        return taskRepository.save(taskToUpdate);
+    public Optional<Task> updateTask(long id, Task task) {
+        Optional<Task> taskToUpdate  = taskRepository.findById(id);
+        if(taskToUpdate.isPresent()){
+            Task newTask = taskToUpdate.get();
+            newTask.setTitle(task.getTitle());
+            newTask.setDescription(task.getDescription());
+            newTask.setCompleted(task.isCompleted());
+            return Optional.of(taskRepository.save(newTask));
+        }
+        
+        return Optional.empty();
     }
 
     @Override
