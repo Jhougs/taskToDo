@@ -5,8 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
+
+
 
 
 @Configuration
@@ -16,10 +20,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.authorizeHttpRequests( (authz) -> authz
-        .requestMatchers(HttpMethod.GET, "/tasks").permitAll()
         .requestMatchers(HttpMethod.GET, "auth/authorized").permitAll()
         .requestMatchers(HttpMethod.GET,"auth/list").hasAnyAuthority("SCOPE_read", "SCOPE_write")
-        .requestMatchers(HttpMethod.POST,"auth/create").hasAuthority("SCOPE_write")
+        .requestMatchers(HttpMethod.POST,"users/createUser").permitAll()
         .anyRequest().authenticated())
         .csrf(csrf -> csrf.disable())
         .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //La sesion Http del usuario se maneja en el token y no en la peticion http
@@ -28,10 +31,13 @@ public class SecurityConfig {
         .oauth2ResourceServer(resourceServer -> resourceServer.jwt(withDefaults()));
 
         return http.build();
-            
-    
-        
 
     }
+    
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
 }
