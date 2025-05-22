@@ -8,6 +8,9 @@ import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,11 +37,15 @@ public class UserController {
         return ResponseEntity.status(Response.SC_CREATED).body(userService.createUser(user));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getUsers")
     public List<User> getUsers() {
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //System.out.println("Authorities: " + authentication.getAuthorities());
         return userService.getAllUsers();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/update/{id}")
     public ResponseEntity<?> updateUserEntity(@RequestBody User user  , @PathVariable Long id ) {
         
@@ -46,6 +53,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userUptaded.orElseThrow());
     }
 
+    @PreAuthorize("hasAuthority('MANAGER')")
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> postMethodName(@PathVariable Long id) {
      

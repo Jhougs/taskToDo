@@ -2,7 +2,7 @@ package com.juanviana.app.todoapp.juanviana_todoapp.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+
+
 
 
 
@@ -52,5 +54,14 @@ public class TaskController {
     public List<TaskDto> getTasks() {
         return taskService.getAllTasks();
     }
+    
+    @GetMapping("{id}")
+    public ResponseEntity<?> getTasksUser(@PathVariable Long id) {
+        List<TaskDto> task = taskService.getAllTasksById(id);
+        if(task.isEmpty()) return ResponseEntity.badRequest().build();
+        else  return ResponseEntity.status(HttpStatus.ACCEPTED).body(task.stream().toList());
+        
+    }
+    
 
 }

@@ -1,6 +1,7 @@
 package com.juanviana.app.todoapp.juanviana_todoapp.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import java.util.Optional;
 
@@ -38,10 +39,7 @@ public class TaskServiceImp implements TaskService {
 
     }
 
-    @Override
-    public Task getTaskById(Long id, String taskId) {
-        return taskRepository.findById(id).orElseThrow();
-    }
+
 
     @Override
     public Task createTask(Long id, Task task ) {
@@ -73,25 +71,19 @@ public class TaskServiceImp implements TaskService {
         taskRepository.deleteById(id);   
     }
 
-    // // Convertir RequestDTO → Entity
-    // private Task convertToEntity(Task dto) {
-    //     Task task = new Task();
-    //     task.setTitle(dto.getTitle());
-    //     task.setDescription(dto.getDescription());
-    //     task.setCompleted(dto.isCompleted());
-    //     return task;
-    // }
+    @Override
+    public List<TaskDto> getAllTasksById(Long id) {
 
-    // // Convertir Entity → ResponseDTO
-    // private TaskDto convertToDTO(Task task) {
-    //     TaskDto dto = new TaskDto();
-    //     dto.setId(task.getId());
-    //     dto.setTitle(task.getTitle());
-    //     dto.setDescription(task.getDescription());
-    //     dto.setCompleted(task.isCompleted());
+            List<Task> tasks = taskRepository.getAllTasksById(id);
+            return tasks.stream()
+                        .map(task -> new TaskDto(
+                            task.getId(),
+                            task.getTitle(),
+                            task.getDescription(),
+                            task.isCompleted(),
+                            task.getUser().getId() != null ? task.getUser().getId() : null
+                        ))
+                        .collect(Collectors.toList());
         
-    //     return dto;
-    // }
-
-    
+    }
 }

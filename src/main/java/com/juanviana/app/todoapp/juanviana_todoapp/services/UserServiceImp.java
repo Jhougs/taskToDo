@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.juanviana.app.todoapp.juanviana_todoapp.model.User;
@@ -14,6 +15,9 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<User> getUserById(Long id) {
@@ -29,8 +33,15 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User createUser(User user) {
+        User userToSafe = new User();
+
+        userToSafe.setRole(user.getRole());
+        userToSafe.setEmail(user.getEmail());
+        userToSafe.setId(user.getId());
+        userToSafe.setPassword(passwordEncoder.encode(user.getPassword()));
+
         
-        return userRepository.save(user);
+        return userRepository.save(userToSafe);
         
     }
     
