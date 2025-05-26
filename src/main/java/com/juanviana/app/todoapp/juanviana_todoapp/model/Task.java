@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+
 
 @Entity
 @Table(name = "task")
@@ -22,8 +24,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "{NotBlank.task.title}")
     private String title;
+
+    @NotEmpty(message = "{NotBlank.task.description}")
     private String description;
+
+
     private Boolean completed;
 
     @JsonIgnoreProperties({"task", "hibernateLazyInitializer", "handler"})	

@@ -6,6 +6,7 @@ package com.juanviana.app.todoapp.juanviana_todoapp.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.juanviana.app.todoapp.juanviana_todoapp.utils.Role;
 
 import jakarta.persistence.Column;
@@ -19,6 +20,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "user")
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id

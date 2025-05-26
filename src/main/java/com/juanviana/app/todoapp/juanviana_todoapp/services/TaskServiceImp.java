@@ -39,17 +39,15 @@ public class TaskServiceImp implements TaskService {
 
     }
 
-
-
     @Override
-    public Task createTask(Long id, Task task ) {
+    public Optional<Task> createTask(Long id, Task task ) {
 
         Optional<User> userFind = userRepository.findById(id);
+        if(task.isCompleted() == null) task.setCompleted(false);
         if(userFind.isPresent()){
             task.setUser(userFind.orElseThrow());            
         }
-
-        return taskRepository.save(task);
+        return Optional.of(taskRepository.save(task));
     }
 
     @Override
@@ -62,8 +60,8 @@ public class TaskServiceImp implements TaskService {
             newTask.setCompleted(task.isCompleted());
             return Optional.of(taskRepository.save(newTask));
         }
-        
         return Optional.empty();
+
     }
 
     @Override
@@ -74,16 +72,19 @@ public class TaskServiceImp implements TaskService {
     @Override
     public List<TaskDto> getAllTasksById(Long id) {
 
-            List<Task> tasks = taskRepository.getAllTasksById(id);
+        List<Task> tasks = taskRepository.getAllTasksById(id);
+        if(!tasks.isEmpty()){
             return tasks.stream()
-                        .map(task -> new TaskDto(
-                            task.getId(),
-                            task.getTitle(),
-                            task.getDescription(),
-                            task.isCompleted(),
-                            task.getUser().getId() != null ? task.getUser().getId() : null
-                        ))
-                        .collect(Collectors.toList());
+            .map(task -> new TaskDto(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.isCompleted(),
+                task.getUser().getId() != null ? task.getUser().getId() : null
+                ))
+            .collect(Collectors.toList());
+        } else return null;  
+        
         
     }
 }
