@@ -10,6 +10,8 @@ public class TaskDto {
     private Boolean completed;
     private Long userId; // Solo incluir el ID del usuario
 
+    
+    public TaskDto(){ }
     public TaskDto(Long id, String title, String description, Boolean completed, Long userId) {
         this.id = id;
         this.title = title;

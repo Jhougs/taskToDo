@@ -18,7 +18,6 @@ import com.juanviana.app.todoapp.juanviana_todoapp.services.TaskService;
 import com.juanviana.app.todoapp.juanviana_todoapp.utils.UtilFunctions;
 import com.juanviana.app.todoapp.juanviana_todoapp.validation.TaskValidation;
 
-import ch.qos.logback.classic.pattern.Util;
 import jakarta.validation.Valid;
 
 
@@ -57,9 +56,7 @@ public class TaskController {
         Optional<Task> taskAns = taskService.createTask(id, task);
         if(taskAns.isPresent()){
             return ResponseEntity.ok("Task created successfully");
-        } else return ResponseEntity.badRequest().build();
-
-        
+        } else return ResponseEntity.badRequest().build(); 
     }
 
     @PutMapping("update/{id}")
@@ -75,7 +72,7 @@ public class TaskController {
         return ResponseEntity.notFound().build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
+    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')  or hasAuthority('USER')")
     @GetMapping
     public List<TaskDto> getTasks() {
         return taskService.getAllTasks();

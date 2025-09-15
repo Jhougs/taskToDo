@@ -1,9 +1,9 @@
 package com.juanviana.app.todoapp.juanviana_todoapp.utils;
 
 public enum Role {
-    ADMIN(1, "MANAGER"),
-    USER(2, "ADMIN"),
-    MANAGER(3, "USER");
+    ADMIN(1, "ADMIN"),
+    USER(2, "USER"),
+    MANAGER(3, "MANAGER");
 
     private final int code;
     private final String name;

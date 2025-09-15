@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.juanviana.app.todoapp.juanviana_todoapp.model.User;
 import com.juanviana.app.todoapp.juanviana_todoapp.repository.UserRepository;
+import com.juanviana.app.todoapp.juanviana_todoapp.utils.UtilFunctions;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -34,7 +35,7 @@ public class UserServiceImp implements UserService {
     @Override
     public User createUser(User user) {
         User userToSafe = new User();
-
+        if(!UtilFunctions.isValidEmail(user.getEmail())) return null; 
         userToSafe.setRole(user.getRole());
         userToSafe.setEmail(user.getEmail());
         userToSafe.setId(user.getId());

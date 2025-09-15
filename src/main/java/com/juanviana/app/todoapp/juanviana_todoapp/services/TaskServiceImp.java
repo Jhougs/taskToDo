@@ -35,7 +35,7 @@ public class TaskServiceImp implements TaskService {
             task.getDescription(),
             task.isCompleted(),
             task.getUser() != null ? task.getUser().getId() : null
-        )).toList();
+        )).toList(); 
 
     }
 
